@@ -1,4 +1,5 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
+from urllib.parse import parse_qs #pour parser
 
 
 class SimpleHandler(BaseHTTPRequestHandler):#SimpleHandler hérite de BaseHTTPRequestHandler
@@ -8,27 +9,59 @@ class SimpleHandler(BaseHTTPRequestHandler):#SimpleHandler hérite de BaseHTTPRe
         self.send_header('Content-type', 'text/html')  
         self.end_headers()  # fin des headers
         self.wfile.write(b"Bienvenue a la page d'accueil !")  # corps de la réponse
-        print("home")
+       
       elif(self.path == "/about"):
         self.send_response(200)  
         self.send_header('Content-type', 'text/html')  
         self.end_headers() 
         self.wfile.write(b"Bienvenue a la page d'a propos !")
-        print("about")
+       
       elif(self.path == "/contact"):
         self.send_response(200)  
         self.send_header('Content-type', 'text/html')  
-        self.end_headers() 
-        self.wfile.write(b"Bienvenue a la page de contact !")
-        print("contact")
+        self.end_headers()
+        html="""
+        <h2>Formulaire de contact</h2>
+        <form method = 'POST', action="/contact">
+        <label for="fname">First name:</label><br>
+        <input type="text" id="fname" name="fname" value=""><br>
+        <label for="lname">Last name:</label><br>
+        <input type="text" id="lname" name="lname" value=""><br>
+        <label for="message">Description</label><br>
+        <textarea name="message"></textarea><br>
+        <input type="submit" value="Submit">
+        </form>
+        """
+        self.wfile.write(html.encode())
+       
       else:
         self.send_response(404)  
         self.send_header('Content-type', 'text/html')  
         self.end_headers() 
         self.wfile.write(b"Erreur, la page que vous recherchez n'existe pas !")
-        print("error")
-
         
+    def do_POST(self):
+      if(self.path == "/contact"):
+        content_length = int(self.headers['Content-Length'])
+        body = self.rfile.read(content_length)  # ça te donne les données en bytes
+        data = body.decode('utf-8')
+        print("Données brutes :", data)
+        parsed = parse_qs(data)# dictionnaire python
+         # récupérer chaque champ
+        firstname = parsed.get("fname", [""])[0]
+        lastname = parsed.get("lname", [""])[0]
+        message = parsed.get("message", [""])[0]
+        self.send_response(200)
+        self.send_header('Content-type', 'text/html; charset=utf-8')
+        self.end_headers()
+        html= f"""
+        <h2>Merci {firstname}</h2>
+        <h3>Votre message a bien été enregistré<br>
+        <a href="/">Retourner à la page d'accueil</a>
+        </h3>
+        """
+        self.wfile.write(html.encode())
+  
 
 # 2️⃣ Créer et lancer le serveur
 host = 'localhost'

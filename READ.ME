@@ -2,6 +2,44 @@ Ce projet sert a mettre en avant ce qu'un serveur comme apache fait a notre plac
 Ici je crée le serveur donc je dois tout faire. Par exemple avec l'utilisation d'apache on peut melanger le html et le php. 
 Ici ce n'est pas possible mon servuer n'est pas assez puissant. La gestion des erreurs (400, 200...) des headers des routes... se fait manuellement ici
 
+fichier dev_server.py :
+Script Python qui surveille ton fichier et relance ton serveur à chaque modification.
+
+fichier serveur.py:
 
 Etape 1 : Création du serveur
+
 Etape 2 : Création des routes 
+
+Etape 3 : Formulaire de contact
+
+le protocole HTTP impose que lorsqu’un serveur reçoit une requête (GET, POST, etc.), il doit toujours répondre avec :
+
+Un code de statut (200 OK, 404 Not Found, 500 Internal Server Error, …).
+👉 C’est self.send_response(200) qui envoie ça.
+
+Des en-têtes HTTP (Content-Type, Content-Length, etc.).
+👉 C’est self.send_header(...) suivi de self.end_headers() qui terminent la section en-têtes.
+
+Un corps de réponse (optionnel, mais recommandé).
+👉 C’est self.wfile.write(...).
+Quand tu fais un POST, le navigateur envoie les données (ton prénom, nom, message) dans le corps de la requête.
+
+✅ Tu as créé ton formulaire HTML (/contact).
+
+✅ Ton serveur reçoit bien les requêtes POST (ça n’affiche plus d’erreur).
+
+✅ On sait lire les données envoyées depuis le navigateur (avec self.rfile.read(...)).
+
+✅ parser les données pour les séparer
+
+
+
+
+
+
+RAPPELS PYTHON
+
+Les tuples ressemblent aux listes, mais on ne peut pas les modifier une fois qu’ils ont été créés.
+Le f devant les triples guillemets lorsqu'on ecrit du HTML au sein du python permet l’interpolation des variables.
+
