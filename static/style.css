@@ -1,0 +1,43 @@
+*{
+  font-family:'Roboto', sans-serif ;
+  margin:0; 
+  padding: 0;
+  box-sizing: border-box;/*le contenue ne sort pas de sa boite*/
+  text-decoration: none;
+}
+
+html{
+    font-size: 100%;
+    overflow-x: hidden;/*debordement dans les x*/
+    scroll-padding-top: 9rem;
+    width: 100vw;        
+    height: 100vh;
+}
+
+body {
+  width: 100%;   /* pas de 100vw => évite le bug avec la scrollbar */
+  min-height: 100vh; /* corps prend au moins la hauteur de l'écran */
+  line-height: 1.6;  /* meilleure lisibilité du texte */
+}
+
+header{
+  display: flex; 
+  align-items: center; 
+  
+}
+
+.logo{
+  height: 7em;
+  width: 7em;
+}
+
+nav{
+
+}
+
+
+a{
+  justify-content: space-between;
+  color: black;
+}
+

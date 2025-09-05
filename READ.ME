@@ -1,6 +1,15 @@
 Ce projet sert a mettre en avant ce qu'un serveur comme apache fait a notre place. 
-Ici je crée le serveur donc je dois tout faire. Par exemple avec l'utilisation d'apache on peut melanger le html et le php. 
-Ici ce n'est pas possible mon servuer n'est pas assez puissant. La gestion des erreurs (400, 200...) des headers des routes... se fait manuellement ici
+Ici je crée le serveur donc je dois tout faire.
+ Par exemple avec l'utilisation d'apache on peut melanger le html et le php. 
+Ici ce n'est pas possible mon serveur n'est pas assez puissant.
+ La gestion des erreurs (400, 200...) des headers des routes... se fait manuellement ici
+ La gestion des URLs
+
+
+Mettre en route le serveur pr afficher ds le navigateur :
+python serveur.py
+Pour ne pas avoir a faire cette commande a chaque modification:
+python dev_server.py
 
 fichier dev_server.py :
 Script Python qui surveille ton fichier et relance ton serveur à chaque modification.
@@ -8,6 +17,13 @@ Script Python qui surveille ton fichier et relance ton serveur à chaque modific
 fichier serveur.py:
 
 Etape 1 : Création du serveur
+
+HTTPServer → c’est le serveur HTTP qui écoute les connexions.
+SimpleHandler → c’est ta classe qui hérite de BaseHTTPRequestHandler.
+👉 Quand un client (ton navigateur) envoie une requête, HTTPServer crée une instance de SimpleHandler pour traiter cette requête précise.
+Cette instance contient :
+Les infos de la requête (self.path, self.headers, self.rfile, etc.)
+Les outils pour envoyer la réponse (self.send_response, self.send_header, self.end_headers, self.wfile.write, …).
 
 Etape 2 : Création des routes 
 
@@ -54,7 +70,7 @@ Le <head> du HTML → dit "voici comment interpréter mon document HTML" (encoda
 
 
 
-RAPPELS PYTHON
+RAPPELS PYTHON ------------------------------------------------------------
 
 Les tuples ressemblent aux listes, mais on ne peut pas les modifier une fois qu’ils ont été créés.
 Le f devant les triples guillemets lorsqu'on ecrit du HTML au sein du python permet l’interpolation des variables.
@@ -63,5 +79,76 @@ Le f devant les triples guillemets lorsqu'on ecrit du HTML au sein du python per
 
 "b" = mode binaire (renvoie des bytes, pas du texte)
 
-RACCOURCIS
+
+RACCOURCIS-----------------------------------------------------------------------
 ! te fait le squelette d'une page HTML
+
+
+NOTIONS A COMPRENDRE-------------------------------------------------------------
+
+Fichier système : ce sont tes fichiers qui existent sur ton disque dur (par ex. templates/home.html, static/apricots.jpg).
+→ Ce sont de simples fichiers sur ton ordinateur.
+
+URL (Uniform Resource Locator) : c’est ce que ton navigateur connaît et demande, comme http://127.0.0.1:8000/home ou http://127.0.0.1:8000/static/apricots.jpg.
+→ Ce n’est pas le chemin du disque, mais une "adresse" qui dit au navigateur : « donne-moi cette ressource auprès du serveur ».
+
+⚠️ Ton navigateur ne peut pas aller fouiller dans ton disque (heureusement, sinon ce serait une faille de sécurité énorme).
+Il passe toujours par ton serveur qui est comme un "gardien" :
+
+il reçoit la requête (par ex. /static/apricots.jpg),
+
+il décide quoi faire,
+
+puis il répond avec le bon contenu.
+
+Pourquoi le navigateur ne peut pas "lire directement" l’image ?
+
+Parce que le navigateur n’a pas accès direct à ton disque (C:\Users\... ou /home/...).
+
+Il ne peut parler qu’en HTTP avec un serveur web.
+
+C’est le serveur qui fait le lien entre "URL demandée" et "fichier sur le disque".
+Navigateur (Chrome/Firefox/etc.)
+        |
+        | 1. Envoie une requête HTTP
+        |    (GET /home  ou  GET /static/apricots.jpg)
+        v
+Serveur Python (ton script)
+        |
+        | 2. Vérifie l'URL demandée :
+        |    - /home   → lire templates/home.html
+        |    - /about  → lire templates/about.html
+        |    - /static/apricots.jpg → lire static/apricots.jpg
+        v
+Disque dur (fichiers du projet)
+        |
+        | 3. Récupère le fichier correspondant
+        v
+Serveur Python
+        |
+        | 4. Envoie une réponse HTTP
+        |    + les octets du fichier demandé
+        v
+Navigateur
+        |
+        | 5. Affiche la page ou l’image
+
+
+Un fichier statique = un fichier qui ne change pas en fonction de l’utilisateur ou d’une logique côté serveur.
+
+Mode binaire (rb) → Python lit les octets bruts, sans transformation.
+👉 C’est exactement ce qu’il faut pour envoyer des images, vidéos, fichiers CSS, JS, etc. En général il faut tjrs lire en mode rb et ensuite le navigateur grace aux infos de son header interprete comme il faut les octets envoyés dans le corps de la réponse.
+
+En gros, le serveur, lorsqu'il recoit un get du nav, envoit une réponse. Cette réponse se découpe en header(metadonnées) et corps de réponse. Dans le header sont les infos pour decrypter le corps de réponse. Dnas le corps de réponse se trouve la réponse à la demande en binaire. Un fois le nav qui recoit tout ca, il décrypte grace a son header le corps de la réponse et transforme le binaire en html, image, css...
+
+Bonnes pratiques :
+
+✅ Séparation des templates dans un dossier templates/ → clair et maintenable.
+
+✅ Gestion des fichiers statiques avec mimetypes → nickel pour servir CSS, JS, images…
+
+✅ Sécurisation XSS avec html.escape() → c’est exactement ce qu’il faut pour afficher du texte saisi par l’utilisateur.
+
+✅ Routing simple (/home, /about, /contact) → ça marche bien pour un projet d’initiation.
+
+✅ Retour d’erreur 404 si la page n’existe pas → bonne pratique pour informer l’utilisateur.
