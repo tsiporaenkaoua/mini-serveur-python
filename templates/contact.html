@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="../static/script.js" defer></script>
   <title>Contact</title>
 </head>
 <body>
@@ -15,14 +16,31 @@
 
   <h2>Formulaire de contact</h2>
   <form method = 'POST', action="/envoi_contact">
-  <label for="fname">First name:</label><br>
+
+  <label for="fname">First name: *</label><br>
   <input type="text" id="fname" name="fname" value=""><br>
-  <label for="lname">Last name:</label><br>
+  <span class="error" id="error-fname"></span><br>
+  
+  <label for="lname">Last name: *</label><br>
   <input type="text" id="lname" name="lname" value=""><br>
+  <span class="error" id="error-lname"></span><br>
+
+  <label for="email">email: *</label><br>
+  <input type="email" id="email" name="email" value=""><br>
+  <span class="error" id="error-email"></span><br>
+
+  <label for="tel">tel: *</label><br>
+  <input type="tel" id="tel" name="tel" value=""><br>
+  <span class="error" id="error-tel"></span><br>
+
   <label for="message">Description</label><br>
-  <textarea name="message"></textarea><br>
-  <input type="submit" value="Submit">
+  <textarea id="message" name="message"></textarea><br>
+  <span class="error" id="error-message"></span><br>
+
+  <input type="submit" id="button" value="Submit"><br>
+  <span class="error" id="error-submit"></span><br
   </form>
+
 
 </body>
 </html>
