@@ -40,8 +40,6 @@ class SimpleHandler(BaseHTTPRequestHandler):#SimpleHandler hérite de BaseHTTPRe
         parsed = parse_qs(data)# dictionnaire python
          # récupérer chaque champ
         firstname = parsed.get("fname", [""])[0]
-        lastname = parsed.get("lname", [""])[0]
-        message = parsed.get("message", [""])[0]
         self.send_response(200)
         self.send_header('Content-type', 'text/html; charset=utf-8')
         self.end_headers()
@@ -57,16 +55,12 @@ class SimpleHandler(BaseHTTPRequestHandler):#SimpleHandler hérite de BaseHTTPRe
          self.render_html("templates/erreur404.html", response=404)  
 
 
-#######################definition de methodes####################
-
     def render_html(self, filename, response=200):
         self.send_response(response)  
         self.send_header('Content-type', 'text/html')  
         self.end_headers() 
         with open(filename, "rb") as f:
           self.wfile.write(f.read()) 
-
-   # def render_template pour le do_post
       
 
 

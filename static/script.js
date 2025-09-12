@@ -1,6 +1,5 @@
-
 // couleur de ciblage lorsqu'on est dans un champs particulier - focus
-//verif les commentaires en bas de page
+
 
 
 let firstname = document.getElementById("fname");
@@ -28,7 +27,8 @@ form.addEventListener("submit", function(event){
     document.getElementById("error-submit").textContent= "Champs obligatoires à remplir avant soumission"
   }
 } )
-/*********************************************Finir validation du tel et email (required....)****** */
+/***************************Finir validation du tel et email (required....)****** */
+
 //affichage erreur si mail/tel non valide
 function isValidityOK(element){
   element.addEventListener("input",function(){
@@ -51,8 +51,3 @@ function no_value(element, message){
 }
 
 
-/*) Que fais tu si je désactive javascript juste parce que je suis un vilain petit canard malveillant?
-Quoi que tu fasses coté client tu devrais prévoir la ceinture de sécurité coté serveur, surtout pour les valeurs $_POST et $_GET car n'importe qui peut les modifier :
-*Primo; est-ce que ce dont tu as besoin existe (isset)
-*Secundo; est ce que la valeur est sécurisée? (ça tu le fais un peu avec htmlspecialchar )
-*Tercio; la valeur est-elle conforme à ton besoin? (Par exemple le mail au format mail, tu peux te faire tes propres petites fonctions, et tu repasses tout à la moulinette)*/
